@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест по Java 2025</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <div class="glass-panel">
+            <div class="quiz-header">
+                <h1>Java Quiz 2025</h1>
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                <div class="stats">
+                    <div class="stat">
+                        <span class="stat-label">Вопрос</span>
+                        <span class="stat-value" id="question-number">0/40</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Правильно</span>
+                        <span class="stat-value" id="correct-answers">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Прошло</span>
+                        <span class="stat-value" id="time-left">00:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="start-screen" class="screen active">
+                <h2>Готовы проверить свои знания Java?</h2>
+                <p>Тест состоит из 40 случайных вопросов. Вопросы и варианты ответов перемешиваются каждый раз.</p>
+                <button id="start-button" class="neo-button">Начать тест</button>
+            </div>
+
+            <div id="quiz-screen" class="screen">
+                <div id="question-container">
+                    <h2 id="question-text">Вопрос загружается...</h2>
+                    <div id="options-container" class="options-container">
+                        <!-- Options will be inserted here -->
+                    </div>
+                </div>
+                <div class="button-container">
+                    <button id="next-button" class="neo-button" disabled>Следующий вопрос</button>
+                </div>
+            </div>
+
+            <div id="results-screen" class="screen">
+                <h2>Результаты теста</h2>
+                <div class="results-container">
+                    <div class="result-circle">
+                        <svg viewBox="0 0 36 36" class="circular-chart">
+                            <path class="circle-bg" d="M18 2.0845
+                                a 15.9155 15.9155 0 0 1 0 31.831
+                                a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                            <path id="circle-progress" class="circle" stroke-dasharray="0, 100" d="M18 2.0845
+                                a 15.9155 15.9155 0 0 1 0 31.831
+                                a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                            <text x="18" y="20.35" class="percentage" id="percentage">0%</text>
+                        </svg>
+                    </div>
+                    <div class="result-stats">
+                        <div id="result-message" class="result-message">Подсчет результатов...</div>
+                        <div class="result-stat">
+                            <span class="result-label">Правильных ответов:</span>
+                            <span class="result-value" id="final-score">0/40</span>
+                        </div>
+                        <div class="result-stat">
+                            <span class="result-label">Затраченное время:</span>
+                            <span class="result-value" id="time-spent">00:00</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="button-container">
+                    <button id="restart-button" class="neo-button">Пройти еще раз</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
