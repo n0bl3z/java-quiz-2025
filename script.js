@@ -16,6 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const timeSpent = document.getElementById('time-spent');
     const percentage = document.getElementById('percentage');
     const circleProgress = document.getElementById('circle-progress');
+    const allQuestionsToggle = document.getElementById('all-questions-toggle');
+    const questionsCount = document.getElementById('questions-count');
+    const questionsCountInfo = document.querySelector('.questions-count-info');
 
     // Quiz state
     let questions = [];
@@ -26,7 +29,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedOptionIndex = -1;
     let startTime;
     let timerInterval;
-    let totalQuestions = 40;
+    let totalQuestions = 40; // По умолчанию 40 вопросов
+    let useAllQuestions = false; // По умолчанию используем только 40 вопросов
+    let totalAvailableQuestions = 0; // Общее количество доступных вопросов
 
     // Add SVG gradient definition for circle progress
     const svgNS = "http://www.w3.org/2000/svg";
@@ -66,7 +71,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             const text = await response.text();
-            return parseQuestions(text);
+            const parsedQuestions = parseQuestions(text);
+            
+            // Обновляем общее количество доступных вопросов
+            totalAvailableQuestions = parsedQuestions.length;
+            
+            // Обновляем информацию о количестве вопросов при переключении
+            updateQuestionsCountDisplay();
+            
+            return parsedQuestions;
         } catch (error) {
             console.error('Error fetching questions:', error);
             alert('Не удалось загрузить вопросы. Пожалуйста, обновите страницу или попробуйте позже.');
@@ -205,8 +218,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Shuffle all questions
         const shuffledQuestions = shuffleArray([...allQuestions]);
         
-        // Select the first 40 questions (or fewer if there aren't 40)
-        const selectedQuestions = shuffledQuestions.slice(0, totalQuestions);
+        // Выбираем вопросы в зависимости от настройки пользователя
+        const selectedQuestions = useAllQuestions ? 
+            shuffledQuestions : // Все вопросы
+            shuffledQuestions.slice(0, totalQuestions); // Только 40 вопросов
         
         // For each question, shuffle the options and track the new position of the correct answer
         let preparedQuestions = selectedQuestions.map(q => {
@@ -375,15 +390,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Start the quiz
     async function startQuiz() {
+        // Получаем настройку пользователя
+        useAllQuestions = allQuestionsToggle.checked;
+        
         // Fetch and prepare questions
         const allQuestions = await fetchQuestions();
         
         if (allQuestions.length === 0) {
-            alert('Не удалось загрузить вопросы. Пожалуйста, проверьте файл vopros.txt');
+            alert('Не удалось загрузить вопросы. Пожалуйста, обновите страницу или попробуйте позже.');
             return;
         }
         
         questions = prepareQuiz(allQuestions);
+        
+        // Обновляем общее количество вопросов
+        totalQuestions = questions.length;
+        
+        // Обновляем проходной балл (50% от максимального)
+        passingScore = Math.ceil(totalQuestions * pointsPerQuestion * 0.5);
         
         // Reset quiz state
         currentQuestionIndex = 0;
@@ -429,7 +453,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Show pass/fail message
         const resultMessage = document.getElementById('result-message');
         if (resultMessage) {
-            resultMessage.textContent = isPassing ? 'Тест пройден!' : 'Тест не пройден. Необходимо набрать минимум 50 баллов.';
+            resultMessage.textContent = isPassing ? 'Тест пройден!' : `Тест не пройден. Необходимо набрать минимум ${passingScore} баллов.`;
             resultMessage.className = isPassing ? 'result-message success' : 'result-message failure';
         }
         
@@ -448,6 +472,39 @@ document.addEventListener('DOMContentLoaded', () => {
             
             timeLeft.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         }, 1000);
+    }
+
+    // Функция для обновления отображения количества вопросов
+    function updateQuestionsCountDisplay() {
+        const newCount = useAllQuestions ? totalAvailableQuestions : 40;
+        
+        // Обновляем отображение на стартовом экране
+        // Добавляем класс для анимации
+        questionsCountInfo.classList.add('animate');
+        
+        // Обновляем текст с небольшой задержкой для эффекта
+        setTimeout(() => {
+            questionsCount.textContent = newCount;
+        }, 400);
+        
+        // Удаляем класс анимации после завершения
+        setTimeout(() => {
+            questionsCountInfo.classList.remove('animate');
+        }, 800);
+        
+        // Обновляем отображение в верхней части экрана (где показано "Вопрос 0/40")
+        // Добавляем анимацию
+        questionNumber.classList.add('animate');
+        
+        // Обновляем текст с небольшой задержкой для эффекта
+        setTimeout(() => {
+            questionNumber.textContent = `0/${newCount}`;
+        }, 400);
+        
+        // Удаляем класс анимации после завершения
+        setTimeout(() => {
+            questionNumber.classList.remove('animate');
+        }, 800);
     }
 
     // Event listeners
@@ -469,6 +526,15 @@ document.addEventListener('DOMContentLoaded', () => {
         resultsScreen.classList.remove('active');
         startScreen.classList.add('active');
     });
+    
+    // Обработчик переключения режима вопросов
+    allQuestionsToggle.addEventListener('change', function() {
+        useAllQuestions = this.checked;
+        updateQuestionsCountDisplay();
+    });
+    
+    // Инициализация: загружаем вопросы для получения общего количества
+    fetchQuestions();
 
     // Add animation to elements when they appear
     const elementsToAnimate = document.querySelectorAll('.screen, .option, .neo-button');

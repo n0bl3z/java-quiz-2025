@@ -35,7 +35,22 @@
 
             <div id="start-screen" class="screen active">
                 <h2>Готовы проверить свои знания Java?</h2>
-                <p>Тест состоит из 40 случайных вопросов. Вопросы и варианты ответов перемешиваются каждый раз.</p>
+                <p>Тест состоит из вопросов по Java. Вопросы и варианты ответов перемешиваются каждый раз.</p>
+                
+                <div class="test-options">
+                    <div class="toggle-container">
+                        <span class="toggle-label">40 вопросов</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="all-questions-toggle">
+                            <span class="toggle-slider"></span>
+                        </label>
+                        <span class="toggle-label">Все вопросы</span>
+                    </div>
+                    <div class="questions-count-info">
+                        Количество вопросов: <span id="questions-count">40</span>
+                    </div>
+                </div>
+                
                 <button id="start-button" class="neo-button">Начать тест</button>
             </div>
 

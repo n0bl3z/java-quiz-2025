@@ -132,6 +132,10 @@ p {
     font-weight: 600;
 }
 
+.stat-value.animate {
+    animation: countChange 0.8s ease;
+}
+
 .screen {
     display: none;
 }
@@ -324,6 +328,106 @@ p {
     font-weight: 600;
 }
 
+.test-options {
+    margin-bottom: 25px;
+}
+
+.questions-count-info {
+    text-align: center;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    transition: all 0.5s ease;
+}
+
+#questions-count {
+    display: inline-block;
+    font-weight: 600;
+    color: var(--primary-color);
+    min-width: 30px;
+    text-align: center;
+    transition: all 0.5s ease;
+}
+
+.questions-count-info.animate #questions-count {
+    animation: countChange 0.8s ease;
+}
+
+@keyframes countChange {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.3);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.toggle-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.toggle-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 3px;
+    background: linear-gradient(145deg, var(--primary-color), var(--secondary-color));
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+    background-color: rgba(108, 99, 255, 0.2);
+    border-color: rgba(108, 99, 255, 0.4);
+}
+
+input:checked + .toggle-slider:before {
+    transform: translateX(26px);
+}
+
 @media (max-width: 768px) {
     .glass-panel {
         padding: 30px 20px;
@@ -386,6 +490,10 @@ p {
     .neo-button {
         padding: 12px 30px;
         font-size: 1rem;
+    }
+    
+    .toggle-container {
+        margin-bottom: 15px;
     }
 }
 
